@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        // Task 1 & 2: Input and Validation. User input. 
+        int low = GetPositiveNumber("Enter a positive low number: "); 
+        int high = GetNumberGreaterThan(low, "Enter a high number greater than the low number: ");
+
+        Console.WriteLine($"The difference is: {high - low}");
+
+        // Task 3: Using List and File I/O.  
+        List<double> numbers = new List<double>(); //(largest to smallest)
+        for (double i = high; i >= low; i--)
+        {
+            numbers.Add(i);
+        }
+
+        // Put numbers in reverse order into a file.
+        using (StreamWriter file = new StreamWriter("numbers.txt"))
+        {
+            foreach (double num in numbers)
+            {
+                file.WriteLine(num);
+            }
+        }
+
+        // Additional Task: Read and Sum Numbers from File
+        double sum = 0;
+        string[] fileNumbers = File.ReadAllLines("numbers.txt");
+        foreach (string line in fileNumbers)
+        {
+            sum += double.Parse(line);
+        }
+
+        Console.WriteLine($"Sum of numbers: {sum}");
+
+        // Additional Task: Print Prime Numbers
+        Console.WriteLine("Prime numbers:");
+        for (int i = low; i <= high; i++)
+        {
+            if (IsPrime(i))
+            {
+                Console.WriteLine(i);
+            }
+        }
+    }
+
+    // To acquire a positive number
+    static int GetPositiveNumber(string message)
+    {
+        int number;
+        do
+        {
+            Console.Write(message);
+            if (!int.TryParse(Console.ReadLine(), out number) || number <= 0)
+            {
+                Console.WriteLine("Invalid input. Please enter a positive integer.");
+            }
+        } while (number <= 0);
+
+        return number;
+    }
+
+    // Way to get a number that is higher than a specified vlue
+    static int GetNumberGreaterThan(int minValue, string message)
+    {
+        int number;
+        do
+        {
+            Console.Write(message);
+            if (!int.TryParse(Console.ReadLine(), out number) || number <= minValue)
+            {
+                Console.WriteLine($"Invalid input. Please enter a number greater than {minValue}.");
+            }
+        } while (number <= minValue);
+
+        return number;
+    }
+
+    // Checking if a number is prime or not (True or False)
+    static bool IsPrime(int number)
+    {
+        if (number < 2) return false;
+        for (int i = 2; i <= Math.Sqrt(number); i++)
+        {
+            if (number % i == 0) return false;
+        }
+        return true;
+    }
+}
+
+//END OF THE PROGRAM!
